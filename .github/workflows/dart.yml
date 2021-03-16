@@ -1,0 +1,68 @@
+name: Dart
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        # Test latest stable, beta, dev, and main channels + last stable release
+        # prior to the introduction of the unified `dart` developer tool.
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      - name: Run hello world
+        run: |
+          echo "main() { print('hello world'); }" > hello.dart
+          dart hello.dart
+
+  test_arch:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: ia32
+
+      - name: Run hello world
+        run: |
+          echo "main() { print('hello world'); }" > hello.dart
+          dart hello.dart
+
+  test_pub:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        sdk: [stable, beta]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      - name: Global activate + run
+        run: |
+          dart pub global activate stagehand
+          mkdir testapp
+          cd testapp
+          stagehand console-simple
+          dart pub get
+          dart run
