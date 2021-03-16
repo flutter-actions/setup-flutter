@@ -1,7 +1,7 @@
 name: "Setup Flutter SDK"
 description: "Setup the Flutter SDK, and add it to the PATH"
 inputs:
-  channel:
+  sdk:
     description: "The channel to install ('stable', 'beta', 'dev')."
     required: false
     default: "stable"
@@ -12,5 +12,5 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.channel }} ${{ runner.os }} ${{ inputs.version }}
+    - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.sdk }} ${{ runner.os }} ${{ inputs.version }}
       shell: bash
