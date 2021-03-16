@@ -8,10 +8,11 @@ This [GitHub Action]() installs and sets up of a Fluter SDK for use in actions b
 ## Inputs
 
 The action takes the following inputs:
-    * `sdk`: A release channel, which will install the latest build from that channel.
-      Available channels are `stable`, `beta`, `dev`. See
-      https://flutter.dev/docs/development/tools/sdk/releases for details.
-    * `version`: A specific SDK version, e.g. `2.0.2` or `2.1.0-12.1.pre`
+  * `sdk`: A release channel, which will install the latest build from that channel.
+    Available channels are `stable`, `beta`, `dev`. See
+    https://flutter.dev/docs/development/tools/sdk/releases for details.
+
+  * `version`: A specific SDK version, e.g. `2.0.2` or `2.1.0-12.1.pre`
 
 ## Basic example
 
