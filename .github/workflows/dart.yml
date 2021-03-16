@@ -48,24 +48,6 @@ jobs:
           echo "main() { print('hello world'); }" > hello.dart
           dart hello.dart
 
-  test_arch:
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: [stable, beta]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          sdk: ${{ matrix.sdk }}
-          architecture: ia32
-
-      - name: Run hello world
-        run: |
-          echo "main() { print('hello world'); }" > hello.dart
-          dart hello.dart
-
   test_pub:
     runs-on: ${{ matrix.os }}
     strategy:
