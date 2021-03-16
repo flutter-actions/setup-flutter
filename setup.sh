@@ -42,6 +42,9 @@ if [ $? -ne 0 ]; then
 fi
 rm "${HOME}/fluttersdk.${EXT}"
 
+# Configure pub to use a fixed location.
+echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
+
 # Update paths.
 echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
 echo "${RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
