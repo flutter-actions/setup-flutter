@@ -4,3 +4,49 @@ This [GitHub Action]() installs and sets up of a Fluter SDK for use in actions b
 
 * Downloading the Flutter SDK
 * Adding the `flutter` command and `dart` command to path
+
+## Inputs
+
+The action takes the following inputs:
+    * `channel`: A release channel, which will install the latest build from that channel.
+      Available channels are `stable`, `beta`, `dev`. See
+      https://flutter.dev/docs/development/tools/sdk/releases for details.
+    * `version`: A specific SDK version, e.g. `2.0.2` or `2.1.0-12.1.pre`
+
+## Basic example
+
+Install the latest stable SDK, and run Hello World.
+
+```yml
+name: Dart
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: socheatsok78/setup-flutter@master
+        with:
+          channel: stable
+          version: 2.0.2
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+      run: dart analyze
+
+      - name: Run tests
+        run: flutter test
+```
+
+# License
+
+See the [`LICENSE`](LICENSE) file.
