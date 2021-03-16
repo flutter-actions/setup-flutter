@@ -18,7 +18,7 @@ The action takes the following inputs:
 Install the latest stable SDK, and run Hello World.
 
 ```yml
-name: Dart
+name: Flutter
 
 on:
   push:
