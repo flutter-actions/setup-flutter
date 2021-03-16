@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: socheatsok78/setup-flutter@master
         with:
-          channel: stable
+          sdk: stable
           version: 2.0.2
 
       - name: Install dependencies
