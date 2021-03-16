@@ -31,7 +31,7 @@ curl --connect-timeout 15 --retry 5 "$URL" > "${HOME}/fluttersdk.${EXT}"
 # Extracting installation archive
 if [[ $OS == linux ]]
 then
-  tar -C "${RUNNER_TOOL_CACHE}" -zxf "${HOME}/fluttersdk.${EXT}" > /dev/null
+  tar -C "${RUNNER_TOOL_CACHE}" -xf "${HOME}/fluttersdk.${EXT}" > /dev/null
 else
   unzip "${HOME}/fluttersdk.${EXT}" -d "${RUNNER_TOOL_CACHE}" > /dev/null
 fi
