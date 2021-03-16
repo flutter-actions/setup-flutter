@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          channel: ${{ matrix.sdk }}
+          channel: ${{ matrix.channel }}
 
       - name: Run hello world
         run: |
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          channel: ${{ matrix.sdk }}
+          channel: ${{ matrix.channel }}
           version: ${{ matrix.version }}
 
       - name: Run hello world
