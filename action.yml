@@ -1,5 +1,8 @@
 name: "Setup Flutter SDK"
 description: "Setup the Flutter SDK, and add it to the PATH"
+branding:
+  icon: "triangle"
+  color: "blue"
 inputs:
   sdk:
     description: "The channel to install ('stable', 'beta', 'dev')."
