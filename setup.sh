@@ -19,7 +19,7 @@ fi
 
 # Calculate download Url. Based on:
 # https://flutter.dev/docs/development/tools/sdk/releases
-PREFIX="https://storage.googleapis.com/flutter_infra/releases"
+PREFIX="https://storage.googleapis.com/flutter_infra_release/releases"
 BUILD="flutter_${OS}_${VERSION}-${CHANNEL}.${EXT}"
 
 URL="${PREFIX}/${CHANNEL}/${OS}/${BUILD}"
