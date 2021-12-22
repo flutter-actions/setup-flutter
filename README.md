@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: socheatsok78/setup-flutter@master
+      - uses: flutter-actions/setup-flutter@master
         with:
           sdk: stable
           version: 2.0.2
