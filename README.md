@@ -42,7 +42,7 @@ jobs:
         run: flutter pub get
 
       - name: Analyze project source
-      run: dart analyze
+        run: dart analyze
 
       - name: Run tests
         run: flutter test
