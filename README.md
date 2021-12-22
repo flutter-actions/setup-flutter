@@ -33,7 +33,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: flutter-actions/setup-flutter@master
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v1
         with:
           sdk: stable
           version: 2.0.2
@@ -47,6 +49,49 @@ jobs:
       - name: Run tests
         run: flutter test
 ```
+
+Working with Android project:
+
+```yml
+name: Flutter for Androi
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v1
+        with:
+          sdk: stable
+          version: 2.0.2
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+        run: dart analyze
+
+      - name: Run tests
+        run: flutter test
+```
+
 
 # License
 
