@@ -53,7 +53,7 @@ jobs:
 Working with Android project:
 
 ```yml
-name: Flutter for Androi
+name: Flutter for Android
 
 on:
   push:
