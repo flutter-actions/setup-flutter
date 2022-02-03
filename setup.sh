@@ -17,32 +17,39 @@ then
   EXT="tar.xz"
 fi
 
-# Calculate download Url. Based on:
-# https://flutter.dev/docs/development/tools/sdk/releases
-PREFIX="https://storage.googleapis.com/flutter_infra_release/releases"
-BUILD="flutter_${OS}_${VERSION}-${CHANNEL}.${EXT}"
-
-URL="${PREFIX}/${CHANNEL}/${OS}/${BUILD}"
-echo "Downloading ${URL}..."
-
-# Download installation archive
-curl --connect-timeout 15 --retry 5 "$URL" > "/tmp/${BUILD}"
-
-# Prepare tool cache folder
+# Flutter runner tool cache
 FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/${VERSION}-${CHANNEL}"
-mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
 
-# Extracting installation archive
-if [[ $OS == linux ]]
-then
-  tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "/tmp/${BUILD}" > /dev/null
-else
-  unzip "/tmp/${BUILD}" -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
-fi
+# Check if Flutter SDK already exists
+# Otherwise download and install
+if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
+  # Calculate download Url. Based on:
+  # https://flutter.dev/docs/development/tools/sdk/releases
+  PREFIX="https://storage.googleapis.com/flutter_infra_release/releases"
+  BUILD="flutter_${OS}_${VERSION}-${CHANNEL}.${EXT}"
 
-if [ $? -ne 0 ]; then
-  echo -e "::error::Download failed! Please check passed arguments."
-  exit 1
+  URL="${PREFIX}/${CHANNEL}/${OS}/${BUILD}"
+  echo "Downloading ${URL}..."
+
+  # Download installation archive
+  curl --connect-timeout 15 --retry 5 "$URL" > "/tmp/${BUILD}"
+
+  # Prepare tool cache folder
+  mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
+
+  # Extracting installation archive
+  if [[ $OS == linux ]]
+  then
+    tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "/tmp/${BUILD}" > /dev/null
+  else
+    unzip "/tmp/${BUILD}" -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
+  fi
+
+  if [ $? -ne 0 ]; then
+    echo -e "::error::Download failed! Please check passed arguments."
+    exit 1
+  fi
+
 fi
 
 # Configure pub to use a fixed location.
