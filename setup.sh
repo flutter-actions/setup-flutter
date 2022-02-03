@@ -51,8 +51,6 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
   fi
 fi
 
-echo "Installed Flutter SDK version \"${VERSION}\"!"
-
 # Configure pub to use a fixed location.
 echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
 
