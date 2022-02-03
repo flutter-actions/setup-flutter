@@ -8,8 +8,6 @@ VERSION="${3:-2.0.2}"
 OS="${2:-Linux}"
 OS=$(echo "$OS" | awk '{print tolower($0)}')
 
-echo "Installing Flutter SDK version \"${VERSION}\" from the ${CHANNEL} channel on ${OS}"
-
 # OS archive file extension
 EXT="zip"
 if [[ $OS == linux ]]
@@ -23,6 +21,8 @@ FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/${VERSION}-${CHANNEL}"
 # Check if Flutter SDK already exists
 # Otherwise download and install
 if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
+  echo "Installing Flutter SDK version \"${VERSION}\" from the ${CHANNEL} channel on ${OS}"
+
   # Calculate download Url. Based on:
   # https://flutter.dev/docs/development/tools/sdk/releases
   PREFIX="https://storage.googleapis.com/flutter_infra_release/releases"
@@ -49,8 +49,9 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
     echo -e "::error::Download failed! Please check passed arguments."
     exit 1
   fi
-
 fi
+
+echo "Installed Flutter SDK version \"${VERSION}\"!"
 
 # Configure pub to use a fixed location.
 echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
