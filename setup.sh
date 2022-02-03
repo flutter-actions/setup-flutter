@@ -4,8 +4,6 @@
 CHANNEL="${1:-stable}"
 VERSION="${3:-2.0.2}"
 
-FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/${VERSION}-${CHANNEL}"
-
 # Parse OS Environment
 OS="${2:-Linux}"
 OS=$(echo "$OS" | awk '{print tolower($0)}')
@@ -31,6 +29,7 @@ echo "Downloading ${URL}..."
 curl --connect-timeout 15 --retry 5 "$URL" > "/tmp/${BUILD}"
 
 # Prepare tool cache folder
+FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/${VERSION}-${CHANNEL}"
 mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
 
 # Extracting installation archive
