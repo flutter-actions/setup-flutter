@@ -4,6 +4,8 @@
 CHANNEL="${1:-stable}"
 VERSION="${3:-2.0.2}"
 
+FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/${VERSION}-${CHANNEL}"
+
 # Parse OS Environment
 OS="${2:-Linux}"
 OS=$(echo "$OS" | awk '{print tolower($0)}')
@@ -26,30 +28,32 @@ URL="${PREFIX}/${CHANNEL}/${OS}/${BUILD}"
 echo "Downloading ${URL}..."
 
 # Download installation archive
-curl --connect-timeout 15 --retry 5 "$URL" > "${HOME}/fluttersdk.${EXT}"
+curl --connect-timeout 15 --retry 5 "$URL" > "/tmp/${BUILD}"
+
+# Prepare tool cache folder
+mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
 
 # Extracting installation archive
 if [[ $OS == linux ]]
 then
-  tar -C "${RUNNER_TOOL_CACHE}" -xf "${HOME}/fluttersdk.${EXT}" > /dev/null
+  tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "${HOME}/${BUILD}" > /dev/null
 else
-  unzip "${HOME}/fluttersdk.${EXT}" -d "${RUNNER_TOOL_CACHE}" > /dev/null
+  unzip "/tmp/${BUILD}" -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
 fi
 
 if [ $? -ne 0 ]; then
   echo -e "::error::Download failed! Please check passed arguments."
   exit 1
 fi
-rm "${HOME}/fluttersdk.${EXT}"
 
 # Configure pub to use a fixed location.
 echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
 
 # Update paths.
 echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-echo "${RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
+echo "${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
 
 # Report success, and print version.
 echo -e "Succesfully installed Flutter SDK:"
-${RUNNER_TOOL_CACHE}/flutter/bin/dart --version
-${RUNNER_TOOL_CACHE}/flutter/bin/flutter --version
+${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/dart --version
+${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter --version
