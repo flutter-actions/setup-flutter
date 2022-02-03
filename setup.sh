@@ -36,7 +36,7 @@ mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
 # Extracting installation archive
 if [[ $OS == linux ]]
 then
-  tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "${HOME}/${BUILD}" > /dev/null
+  tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "/tmp/${BUILD}" > /dev/null
 else
   unzip "/tmp/${BUILD}" -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
 fi
