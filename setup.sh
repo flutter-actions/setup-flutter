@@ -77,6 +77,8 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		echo -e "::error::Download failed! Please check passed arguments."
 		exit 1
 	fi
+else
+	echo "Cache restored Flutter SDK version \"${FLUTTER_VERSION}\" from the ${FLUTTER_CHANNEL} channel on ${FLUTTER_OS}"
 fi
 
 # Configure pub to use a fixed location.
