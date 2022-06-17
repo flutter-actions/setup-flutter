@@ -2,13 +2,12 @@
 
 # Options
 ARCH=$(echo "${RUNNER_ARCH:-x64}" | awk '{print tolower($0)}')
-OS=$(echo "${RUNNER_OS:-macOS}" | awk '{print tolower($0)}')
+OS=$(echo "${RUNNER_OS:-linux}" | awk '{print tolower($0)}')
 
 # Args
 FLUTTER_VERSION=${1:-3.0.2}
 FLUTTER_CHANNEL=${2:-stable}
 FLUTTER_OS=$OS
-FLUTTER_ARCH=""
 
 # OS archive file extension
 EXT="zip"
@@ -18,12 +17,9 @@ then
 fi
 
 # Apple Intel or Apple Silicon
-if [[ $OS == macos ]]
+if [[ $OS == macos && $ARCH == 'arm64' ]]
 then
-	if [[ $ARCH == 'arm64' ]]
-	then
-		FLUTTER_ARCH="_$ARCH"
-	fi
+	FLUTTER_OS="${FLUTTER_OS}_$ARCH"
 fi
 
 # Flutter runner tool cache
@@ -53,7 +49,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	# Windows
 	# /stable    /windows/   flutter_windows_3.0.2-stable.zip
 	# /beta      /windows/   flutter_windows_3.1.0-9.0.pre-beta.zip
-	FLUTTER_BUILD="flutter_${FLUTTER_OS}${FLUTTER_ARCH}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
+	FLUTTER_BUILD="flutter_${FLUTTER_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
 	FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"
 
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
