@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v1
+        uses: flutter-actions/setup-flutter@v2
         with:
           channel: stable
           version: 3.0.2
@@ -77,7 +77,7 @@ jobs:
         uses: android-actions/setup-android@v2
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v1
+        uses: flutter-actions/setup-flutter@v2
         with:
           channel: stable
           version: 3.0.2
