@@ -7,46 +7,18 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test-stable:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        # Test latest stable, beta, dev, and main channels + last stable release
-        # prior to the introduction of the unified `dart` developer tool.
-        sdk: [stable, beta]
+        version: [3.0.2, 3.0.1, 3.0.0, 2.10.5]
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          sdk: ${{ matrix.sdk }}
-
-      - name: Dart version
-        run: dart --version
-      - name: Flutter version
-        run: flutter --version
-
-      - name: Run hello world
-        run: |
-          echo "main() { print('hello world'); }" > hello.dart
-          dart hello.dart
-
-  test-dev:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        # Test latest stable, beta, dev, and main channels + last stable release
-        # prior to the introduction of the unified `dart` developer tool.
-        sdk: [dev]
-        version: ["2.1.0-12.1.pre"]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          sdk: ${{ matrix.sdk }}
+          channel: stable
           version: ${{ matrix.version }}
 
       - name: Dart version
@@ -59,18 +31,19 @@ jobs:
           echo "main() { print('hello world'); }" > hello.dart
           dart hello.dart
 
-  test_pub:
+  test-beta:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [stable, beta]
+        version: [3.0.1, 3.1.0-9.0.pre]
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          sdk: ${{ matrix.sdk }}
+          channel: beta
+          version: ${{ matrix.version }}
 
       - name: Dart version
         run: dart --version
