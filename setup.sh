@@ -2,7 +2,7 @@
 
 # Parse SDK and version args
 CHANNEL="${1:-stable}"
-VERSION="${3:-3.0.2}"
+VERSION="${3:-2.0.2}"
 
 # Parse OS Environment
 OS="${2:-Linux}"
