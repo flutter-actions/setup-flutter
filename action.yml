@@ -13,7 +13,7 @@ inputs:
     required: false
     default: "stable"
   cache:
-    description: 'Cache the installed Flutter SDK. Default: True'
+    description: 'Cache the installed Flutter SDK. Default: false'
     required: false
     default: "false"
   cache-key:
