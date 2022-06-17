@@ -8,11 +8,11 @@ This [GitHub Action]() installs and sets up of a Flutter SDK for use in actions 
 ## Inputs
 
 The action takes the following inputs:
-  * `sdk`: A release channel, which will install the latest build from that channel.
+  * `channel`: A release channel, which will install the latest build from that channel.
     Available channels are `stable`, `beta`, `dev`. See
     https://flutter.dev/docs/development/tools/sdk/releases for details.
 
-  * `version`: A specific SDK version, e.g. `2.0.2` or `2.1.0-12.1.pre`
+  * `version`: A specific SDK version, e.g. `3.0.2` or `3.1.0-9.0.pre`
 
 ## Basic example
 
@@ -35,10 +35,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v1
+        uses: flutter-actions/setup-flutter@v2
         with:
-          sdk: stable
-          version: 2.0.2
+          channel: stable
+          version: 3.0.2
 
       - name: Install dependencies
         run: flutter pub get
@@ -77,10 +77,10 @@ jobs:
         uses: android-actions/setup-android@v2
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v1
+        uses: flutter-actions/setup-flutter@v2
         with:
-          sdk: stable
-          version: 2.0.2
+          channel: stable
+          version: 3.0.2
 
       - name: Install dependencies
         run: flutter pub get

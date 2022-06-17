@@ -4,16 +4,29 @@ branding:
   icon: "triangle"
   color: "blue"
 inputs:
-  sdk:
-    description: "The channel to install ('stable', 'beta', 'dev')."
+  version:
+    description: "The version to install: Default: 3.0.2"
+    required: false
+    default: "3.0.2"
+  channel:
+    description: "The version to install. Default: stable"
     required: false
     default: "stable"
-  version:
-      description: "The version to install"
-      required: false
-      default: "2.0.2"
+  cache:
+    description: 'Cache the installed Flutter SDK. Default: false'
+    required: false
+    default: "false"
+  cache-key:
+    description: "An explicit key for restoring and saving the Flutter SDK to/from cache"
+    required: false
+    default: "flutter"
 runs:
   using: "composite"
   steps:
-    - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.sdk }} ${{ runner.os }} ${{ inputs.version }}
+    - if: ${{ inputs.cache == 'true' }}
+      uses: actions/cache@v3
+      with:
+        path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
+        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}
+    - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.version }} ${{ inputs.channel }}
       shell: bash
