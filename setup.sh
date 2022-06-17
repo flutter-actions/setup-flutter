@@ -59,7 +59,8 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
 
 	# Download installation archive
-	curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > "/tmp/${FLUTTER_BUILD}"
+	DOWNLOAD_PATH="/tmp/${FLUTTER_BUILD}"
+	curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH}
 
 	# Prepare tool cache folder
 	mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
@@ -67,9 +68,9 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	# Extracting installation archive
 	if [[ $OS == linux ]]
 	then
-		tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf "/tmp/${BUILD}" > /dev/null
+		tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf ${DOWNLOAD_PATH} > /dev/null
 	else
-		unzip "/tmp/${BUILD}" -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
+		unzip ${DOWNLOAD_PATH} -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
 	fi
 
 	if [ $? -ne 0 ]; then
