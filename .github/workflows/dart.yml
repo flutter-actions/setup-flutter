@@ -22,10 +22,16 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
 
+      - name: Dart version
+        run: dart --version
+      - name: Flutter version
+        run: flutter --version
+
       - name: Run hello world
         run: |
           echo "main() { print('hello world'); }" > hello.dart
           dart hello.dart
+
   test-dev:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -42,6 +48,11 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
           version: ${{ matrix.version }}
+
+      - name: Dart version
+        run: dart --version
+      - name: Flutter version
+        run: flutter --version
 
       - name: Run hello world
         run: |
@@ -60,6 +71,11 @@ jobs:
       - uses: ./
         with:
           sdk: ${{ matrix.sdk }}
+
+      - name: Dart version
+        run: dart --version
+      - name: Flutter version
+        run: flutter --version
 
       - name: Global activate + run
         run: |
