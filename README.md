@@ -8,11 +8,15 @@ This [GitHub Action]() installs and sets up of a Flutter SDK for use in actions 
 ## Inputs
 
 The action takes the following inputs:
-  * `channel`: A release channel, which will install the latest build from that channel.
-    Available channels are `stable`, `beta`, `dev`. See
+  * `channel`: (Required) A release channel, which will install the latest build from that channel.
+    Available channels are `stable`, `beta`. See
     https://flutter.dev/docs/development/tools/sdk/releases for details.
 
-  * `version`: A specific SDK version, e.g. `3.0.2` or `3.1.0-9.0.pre`
+  * `version`: (Required) A specific SDK version, e.g. `3.0.2` or `3.1.0-9.0.pre`
+
+  * `cache`: (Optional) Enable cache of the installed Flutter SDK. Default: false
+
+  * `cache-key`: (Optional) An explicit key for restoring and saving the Flutter SDK to/from cache
 
 ## Basic example
 
