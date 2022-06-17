@@ -19,7 +19,7 @@ inputs:
   cache-key:
     description: "An explicit key for restoring and saving the Flutter SDK to/from cache"
     required: false
-    default: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
+    default: "flutter"
 runs:
   using: "composite"
   steps:
@@ -27,6 +27,6 @@ runs:
       uses: actions/cache@v3
       with:
         path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
-        key: ${{ inputs.cache-key }}
+        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}
     - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.version }} ${{ inputs.channel }}
       shell: bash
