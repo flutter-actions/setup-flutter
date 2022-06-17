@@ -5,8 +5,8 @@ ARCH=$(echo "${RUNNER_ARCH:-x64}" | awk '{print tolower($0)}')
 OS=$(echo "${RUNNER_OS:-macOS}" | awk '{print tolower($0)}')
 
 # Args
-FLUTTER_CHANNEL=${1:-stable}
-FLUTTER_VERSION=${2:-3.0.2}
+FLUTTER_VERSION=${1:-3.0.2}
+FLUTTER_CHANNEL=${2:-stable}
 FLUTTER_OS=$OS
 FLUTTER_ARCH=""
 
