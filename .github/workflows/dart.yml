@@ -50,11 +50,7 @@ jobs:
       - name: Flutter version
         run: flutter --version
 
-      - name: Global activate + run
+      - name: Run hello world
         run: |
-          dart pub global activate stagehand
-          mkdir testapp
-          cd testapp
-          stagehand console-simple
-          dart pub get
-          dart run
+          echo "main() { print('hello world'); }" > hello.dart
+          dart hello.dart
