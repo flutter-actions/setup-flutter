@@ -25,6 +25,8 @@ jobs:
         run: dart --version
       - name: Flutter version
         run: flutter --version
+      - name: Flutter doctor
+        run: flutter doctor
 
       - name: Run hello world
         run: |
@@ -49,6 +51,8 @@ jobs:
         run: dart --version
       - name: Flutter version
         run: flutter --version
+      - name: Flutter doctor
+        run: flutter doctor
 
       - name: Run hello world
         run: |
