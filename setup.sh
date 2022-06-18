@@ -17,7 +17,7 @@ then
 fi
 
 # Apple Intel or Apple Silicon
-if [[ $OS == macos && $ARCH == 'arm64' ]]
+if [[ $OS == macos && $ARCH == 'arm64' && $FLUTTER_VERSION == 3.* ]]
 then
 	FLUTTER_OS="${FLUTTER_OS}_$ARCH"
 fi
