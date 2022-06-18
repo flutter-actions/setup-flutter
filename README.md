@@ -1,4 +1,4 @@
-# setup-flutter
+## About
 
 This [GitHub Action]() installs and sets up of a Flutter SDK for use in actions by:
 
@@ -96,6 +96,13 @@ jobs:
         run: flutter test
 ```
 
+## Troubleshooting
+
+### Apple Silicon
+
+If you are running this on `self-hosted` runner specially with Apple Silicon Mac only Flutter SDK v3.0.0 or later are supported.
+
+For more information plase check https://docs.flutter.dev/get-started/install/macos.
 
 # License
 
