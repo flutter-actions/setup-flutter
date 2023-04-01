@@ -5,6 +5,8 @@ This [GitHub Action]() installs and sets up of a Flutter SDK for use in actions 
 * Downloading the Flutter SDK
 * Adding the `flutter` command and `dart` command to path
 
+[![Flutter](https://github.com/flutter-actions/setup-flutter/actions/workflows/dart.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/dart.yml)
+
 ## Inputs
 
 The action takes the following inputs:
