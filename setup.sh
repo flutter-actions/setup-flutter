@@ -9,6 +9,12 @@ FLUTTER_VERSION=${1:-3.0.2}
 FLUTTER_CHANNEL=${2:-stable}
 FLUTTER_OS=$OS
 
+# Detect the latest version
+if [[ $FLUTTER_VERSION == latest ]]
+then
+        FLUTTER_VERSION=$(curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json | jq -r ".releases | map(select(.channel == \"${FLUTTER_CHANNEL}\")) | .[0].version")
+fi
+
 # OS archive file extension
 EXT="zip"
 if [[ $OS == linux ]]
