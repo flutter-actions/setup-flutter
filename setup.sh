@@ -10,9 +10,7 @@ FLUTTER_CHANNEL=${2:-stable}
 FLUTTER_OS=$OS
 
 # Detect the latest version
-if [[ $FLUTTER_VERSION == latest ]]
-then
-        FLUTTER_VERSION=$(curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json | jq -r ".releases | map(select(.channel == \"${FLUTTER_CHANNEL}\")) | .[0].version")
+if [[ $FLUTTER_VERSION == "latest" ]] then echo "Detecting latest version..." curl -L https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json -o "${RUNNER_TEMP}/flutter_release.json" CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "${RUNNER_TEMP}/flutter_release.json") FLUTTER_VERSION=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].version" "${RUNNER_TEMP}/flutter_release.json") rm "${RUNNER_TEMP}/flutter_release.json" fi
 fi
 
 # OS archive file extension
