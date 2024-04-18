@@ -59,6 +59,8 @@ jobs:
         with:
           channel: beta
           version: ${{ matrix.version }}
+          cache: true
+          cache-sdk: true
 
       - name: Dart version
         run: dart --version
