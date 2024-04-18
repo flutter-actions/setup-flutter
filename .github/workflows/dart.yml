@@ -23,7 +23,7 @@ jobs:
           - 3.0.0
           - 2.10.5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./
         with:
@@ -53,7 +53,7 @@ jobs:
           - 3.3.0-0.0.pre
           - 3.1.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./
         with:
