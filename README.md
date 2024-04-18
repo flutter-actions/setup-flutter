@@ -40,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v2
+        uses: flutter-actions/setup-flutter@v3
         with:
           channel: stable
           version: 3.0.2
@@ -74,18 +74,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: 1.8
+          distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v2
+        uses: flutter-actions/setup-flutter@v3
         with:
           channel: stable
           version: 3.0.2
