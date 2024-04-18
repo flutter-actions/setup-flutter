@@ -28,5 +28,5 @@ runs:
       with:
         path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
         key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}
-    - run: $GITHUB_ACTION_PATH/setup.sh ${{ inputs.version }} ${{ inputs.channel }}
+    - run: $GITHUB_ACTION_PATH/action.sh ${{ inputs.version }} ${{ inputs.channel }}
       shell: bash
