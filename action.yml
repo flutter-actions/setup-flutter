@@ -21,9 +21,9 @@ inputs:
     required: false
     default: "false"
   cache-key:
-    description: "An explicit key for restoring and saving the Flutter SDK to/from cache"
+    description: "An explicit key for restoring and saving the pub dependencies to/from cache"
     required: false
-    default: "flutter"
+    default: "${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}"
 runs:
   using: "composite"
   steps:
