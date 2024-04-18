@@ -32,10 +32,11 @@ then
 	FLUTTER_OS="${FLUTTER_OS}_$ARCH"
 fi
 
-# Flutter runner tool cache
+# Flutter runner tool cache and pub cache
 # path: "${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}"
 # key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
 FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${RUNNER_ARCH}"
+FLUTTER_PUB_CACHE="${RUNNER_TEMP}/pub-cache"
 
 # Check if Flutter SDK already exists
 # Otherwise download and install
@@ -88,10 +89,10 @@ else
 fi
 
 # Configure pub to use a fixed location.
-echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
+echo "PUB_CACHE=${FLUTTER_PUB_CACHE}" >> $GITHUB_ENV
 
 # Update paths.
-echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+echo "${FLUTTER_PUB_CACHE}/bin" >> $GITHUB_PATH
 echo "${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
 
 # Report success, and print version.

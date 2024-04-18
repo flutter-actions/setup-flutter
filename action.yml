@@ -13,6 +13,10 @@ inputs:
     required: false
     default: "stable"
   cache:
+    description: 'Cache the pub dependencies. Default: false'
+    required: false
+    default: "false"
+  cache-sdk:
     description: 'Cache the installed Flutter SDK. Default: false'
     required: false
     default: "false"
@@ -23,10 +27,18 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - if: ${{ inputs.cache == 'true' }}
+    # Cache the Flutter SDK
+    - if: ${{ inputs.cache-sdk == 'true' }}
       uses: actions/cache@v3
       with:
         path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
         key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}
+    # Cache the pub dependencies
+    - if: ${{ inputs.cache == 'true' }}
+      uses: actions/cache@v3
+      with:
+        path: ${{ runner.temp }}/pub-cache
+        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}-pub-cache
+    # Run the action
     - run: $GITHUB_ACTION_PATH/action.sh ${{ inputs.version }} ${{ inputs.channel }}
       shell: bash
