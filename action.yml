@@ -32,7 +32,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
-        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}
+        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
     # Cache the pub dependencies
     - if: ${{ inputs.cache == 'true' }}
       uses: actions/cache@v3
