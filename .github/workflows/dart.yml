@@ -21,7 +21,6 @@ jobs:
           - latest
           - 3.3.0
           - 3.0.0
-          - 2.10.5
     steps:
       - uses: actions/checkout@v4
 
