@@ -27,9 +27,10 @@ then
 fi
 
 # Apple Intel or Apple Silicon
-if [[ $OS == macos && $ARCH == 'arm64' && $FLUTTER_VERSION == 3.* ]]
+if [[ $OS == "macos" && $ARCH == "arm64" && $FLUTTER_VERSION < 3.* ]]
 then
-	FLUTTER_OS="${FLUTTER_OS}_$ARCH"
+	echo -e "::error::Flutter SDK version \"${FLUTTER_VERSION}\" is not supported on Apple Silicon. Please use version 3.0.0 or higher."
+	exit 1
 fi
 
 # Flutter runner tool cache
