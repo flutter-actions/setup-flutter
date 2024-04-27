@@ -12,7 +12,7 @@ FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releas
 FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
 FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
 
-echo "Downloading Flutter release manifest: $FLUTTER_RELEASE_MANIFEST_URL"
+echo "Fetching Flutter SDK release manifest..."
 if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
 then
 	# Detect the latest version
@@ -34,8 +34,7 @@ then
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	fi
 else
-	echo -e "::error::Failed to download Flutter release manifest."
-	exit 1
+	echo -e "::warning::Failed to fetch Flutter SDK release manifest. Switched to using default fallback download strategy."
 fi
 
 # Apple Intel or Apple Silicon
