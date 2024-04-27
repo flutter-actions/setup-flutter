@@ -67,7 +67,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
 
 	# Download installation archive
-	DOWNLOAD_PATH="/tmp/${FLUTTER_BUILD}"
+	DOWNLOAD_PATH="${RUNNER_TEMP}/${FLUTTER_BUILD}"
 	curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH}
 
 	# Prepare tool cache folder
