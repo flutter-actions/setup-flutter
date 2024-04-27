@@ -91,12 +91,14 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	DOWNLOAD_PATH="${RUNNER_TEMP}/${FLUTTER_BUILD}"
 	if curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH};
 	then
-		echo -n "Verifying checksum "
-		if [[ $OS == "linux" ]]
-		then
-			echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
-		else
-			echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+		if [[ -n "${FLUTTER_RELEASE_SHA256}" ]]; then
+			echo -n "Verifying checksum "
+			if [[ $OS == "linux" ]]
+			then
+				echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
+			else
+				echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+			fi
 		fi
 	else
 		echo -e "::error::Download failed! Please check passed arguments."
