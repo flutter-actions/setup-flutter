@@ -95,7 +95,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	if curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH};
 	then
 		if [[ -n "${FLUTTER_RELEASE_SHA256}" ]]; then
-			echo -n "Verifying checksum "
+			echo -n "Verifying checksum: "
 			if [[ $OS == "macos" ]]
 			then
 				# Note: on macOS put 2 spaces between the hash and the filename
