@@ -12,11 +12,12 @@ if [ "$RUNNER_OS" = "darwin" ]; then
 fi
 
 # GitHub Context
-export GITHUB_ENV="$SETUP_FLUTTER_WORKDIR/.env"
-export GITHUB_PATH="$SETUP_FLUTTER_WORKDIR/.path"
+export GITHUB_ENV="$ACTION_TEST_DIR/.GITHUB_ENV"
+export GITHUB_PATH="$ACTION_TEST_DIR/.GITHUB_PATH"
 
 # Create mock environment
 mkdir -p "$RUNNER_TOOL_CACHE" "$RUNNER_TEMP"
+touch "$GITHUB_ENV" "$GITHUB_PATH"
 
 # Run the action
 curl -fsSL "https://raw.githubusercontent.com/flutter-actions/setup-flutter/main/action.sh" | bash -s -- "$@"
