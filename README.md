@@ -109,6 +109,18 @@ If you are running this on `self-hosted` runner specially with Apple Silicon Mac
 
 For more information plase check https://docs.flutter.dev/get-started/install/macos.
 
+## Using outside of GitHub Actions environment
+
+This action is designed to be used in GitHub Actions environment. If you want to use it outside of GitHub Actions, you can use the following script:
+
+```bash
+# Usage:
+#     curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/main/install.sh | bash -s -- <version> <channel>
+# 
+# Example:
+curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/main/install.sh | bash -s -- 3.0.2 stable
+```
+
 # License
 
 See the [`LICENSE`](LICENSE) file.
