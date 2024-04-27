@@ -1,4 +1,5 @@
 #!/bin/bash
+SETUP_FLUTTER_BRANCH=${SETUP_FLUTTER_BRANCH:-"main"}
 SETUP_FLUTTER_WORKDIR=${SETUP_FLUTTER_WORKDIR:-"$(pwd)/.setup-flutter"}
 
 # Runner environment variables
@@ -20,4 +21,4 @@ mkdir -p "$RUNNER_TOOL_CACHE" "$RUNNER_TEMP"
 touch "$GITHUB_ENV" "$GITHUB_PATH"
 
 # Run the action
-curl -fsSL "https://raw.githubusercontent.com/flutter-actions/setup-flutter/main/action.sh" | bash -s -- "$@"
+curl -fsSL "https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SETUP_FLUTTER_BRANCH}/action.sh" | bash -s -- "$@"

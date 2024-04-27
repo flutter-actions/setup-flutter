@@ -119,7 +119,7 @@ This action is designed to be used in GitHub Actions environment. If you want to
 # 
 # Example:
 
-SETUP_FLUTTER_BRANCH=main
+export SETUP_FLUTTER_BRANCH=main
 curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SETUP_FLUTTER_BRANCH}/install.sh | bash -s -- 3.0.2 stable
 ```
 
