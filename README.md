@@ -109,6 +109,10 @@ If you are running this on `self-hosted` runner specially with Apple Silicon Mac
 
 For more information plase check https://docs.flutter.dev/get-started/install/macos.
 
+### Flutter uses Google Analytics
+
+Starting from `flutter-actions/setup-flutter@v3`, the action will disable **Flutter SDK** built-in **Google Analytics** by default.
+
 ## Using outside of GitHub Actions environment
 
 This action is designed to be used in GitHub Actions environment. If you want to use it outside of GitHub Actions, you can use the following script:

@@ -110,6 +110,9 @@ echo "PUB_CACHE=${FLUTTER_PUB_CACHE}" >> $GITHUB_ENV
 echo "${FLUTTER_PUB_CACHE}/bin" >> $GITHUB_PATH
 echo "${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
 
+# Disable Google Analytics
+${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-analytics
+
 # Report success, and print version.
 echo -e "Succesfully installed Flutter SDK:"
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/dart --version
