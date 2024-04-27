@@ -52,7 +52,7 @@ fi
 
 if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	FLUTTER_BUILD_OS=$FLUTTER_OS
-	echo "Installing Flutter SDK version \"${FLUTTER_VERSION}\" from the ${FLUTTER_CHANNEL} channel for ${OS}/${ARCH}..."
+	echo "Installing Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${OS}_${ARCH}\" ..."
 
 	# Linux
 	# /stable    /linux/     flutter_linux_2.10.2-stable.tar.xz
@@ -99,7 +99,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		exit 1
 	fi
 else
-	echo "Cache restored Flutter SDK version \"${FLUTTER_VERSION}\" from the ${FLUTTER_CHANNEL} channel for ${OS}/${ARCH}."
+	echo "Cache restored Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${OS}_${ARCH}\""
 fi
 
 # Configure pub to use a fixed location.
