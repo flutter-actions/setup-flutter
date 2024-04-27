@@ -110,8 +110,9 @@ echo "PUB_CACHE=${FLUTTER_PUB_CACHE}" >> $GITHUB_ENV
 echo "${FLUTTER_PUB_CACHE}/bin" >> $GITHUB_PATH
 echo "${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
 
-# Disable Google Analytics
+# Disable Google Analytics and CLI animations
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-analytics
+${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-cli-animations
 
 # Print Flutter config
 echo "Flutter config:"
