@@ -88,40 +88,50 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	FLUTTER_BUILD="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
 	FLUTTER_DOWNLOAD_URL=${FLUTTER_DOWNLOAD_URL:-"${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"}
 
-	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
-
 	# Download installation archive
+	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
 	DOWNLOAD_PATH="${RUNNER_TEMP}/${FLUTTER_BUILD}"
-	if curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH};
-	then
-		if [[ -n "${FLUTTER_RELEASE_SHA256}" ]]; then
-			echo -n "Verifying checksum: "
-			if [[ $OS == "macos" ]]
-			then
-				# Note: on macOS put 2 spaces between the hash and the filename
-				echo "${FLUTTER_RELEASE_SHA256}  ${DOWNLOAD_PATH}" | shasum -a 256 -c -
-			else
-				echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
-			fi
-		fi
-	else
+	curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH}
+	if [ $? -ne 0 ]; then
 		echo -e "::error::Download failed! Please check passed arguments."
 		exit 1
+	fi
+
+	# Verifying checksum
+	if [[ -n "${FLUTTER_RELEASE_SHA256}" ]]; then
+		FLUTTER_RELEASE_SHA256_CODE=0
+		echo -n "Verifying checksum: "
+		if [[ $OS == "macos" ]]
+		then
+			# Note: on macOS put 2 spaces between the hash and the filename
+			echo "${FLUTTER_RELEASE_SHA256}  ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+			FLUTTER_RELEASE_SHA256_CODE=$?
+		else
+			echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
+			FLUTTER_RELEASE_SHA256_CODE=$?
+		fi
+		if [ $FLUTTER_RELEASE_SHA256_CODE -ne 0 ]; then
+			echo -e "::error::Checksum verification failed! Please check passed arguments."
+			exit 1
+		fi
 	fi
 
 	# Prepare tool cache folder
 	mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
 
 	# Extracting installation archive
+	EXTRACT_ARCHIVE_CODE=0
+	echo "Extracting Flutter SDK archive..."
 	if [[ $OS == linux ]]
 	then
 		tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf ${DOWNLOAD_PATH} > /dev/null
+		EXTRACT_ARCHIVE_CODE=$?
 	else
 		unzip ${DOWNLOAD_PATH} -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
+		EXTRACT_ARCHIVE_CODE=$?
 	fi
-
-	if [ $? -ne 0 ]; then
-		echo -e "::error::Download failed! Please check passed arguments."
+	if [ $EXTRACT_ARCHIVE_CODE -ne 0 ]; then
+		echo -e "::error::Failed to extract Flutter SDK archive."
 		exit 1
 	fi
 else
