@@ -19,13 +19,6 @@ then
         rm "${RUNNER_TEMP}/flutter_release.json"
 fi
 
-# OS archive file extension
-EXT="zip"
-if [[ $OS == linux ]]
-then
-	EXT="tar.xz"
-fi
-
 # Apple Intel or Apple Silicon
 if [[ $OS == "macos" && $ARCH == "arm64" && $FLUTTER_VERSION < 3.* ]]
 then
@@ -43,8 +36,15 @@ FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_V
 # https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.0.2-stable.zip
 FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 
+# OS archive file extension
+EXT="zip"
+if [[ $OS == "linux" ]]
+then
+	EXT="tar.xz"
+fi
 
 if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
+	FLUTTER_BUILD_OS=$FLUTTER_OS
 	echo "Installing Flutter SDK version \"${FLUTTER_VERSION}\" from the ${FLUTTER_CHANNEL} channel on ${FLUTTER_OS}"
 
 	# Linux
@@ -60,7 +60,14 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	# Windows
 	# /stable    /windows/   flutter_windows_3.0.2-stable.zip
 	# /beta      /windows/   flutter_windows_3.1.0-9.0.pre-beta.zip
-	FLUTTER_BUILD="flutter_${FLUTTER_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
+
+	# Apple Intel or Apple Silicon
+	if [[ $OS == "macos" && $ARCH == "arm64" ]]
+	then
+		FLUTTER_BUILD_OS="macos_arm64"
+	fi
+
+	FLUTTER_BUILD="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
 	FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"
 
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
