@@ -12,25 +12,30 @@ FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releas
 FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
 FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
 
-# Detect the latest version
-if [[ $FLUTTER_VERSION == "latest" ]]
+echo "Downloading Flutter release manifest: $FLUTTER_RELEASE_MANIFEST_URL"
+if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
 then
-	echo "Detecting latest version..."
-	if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
+	# Detect the latest version
+	if [[ $FLUTTER_VERSION == "latest" ]]
 	then
 		FLUTTER_RELEASE_CURRENT=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_VERSION=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		rm "$FLUTTER_RELEASE_MANIFEST_FILE"
 
 		# Set the detected version
 		FLUTTER_VERSION=$FLUTTER_RELEASE_VERSION
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	else
-		echo -e "::error::Failed to detect the latest version."
-		exit 1
+		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
+
+		# Set the detected version
+		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	fi
+else
+	echo -e "::error::Failed to download Flutter release manifest."
+	exit 1
 fi
 
 # Apple Intel or Apple Silicon
