@@ -16,7 +16,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: 
+          - ubuntu-latest
+          - macos-latest # Apple M1 Silicon
+          - macos-13 # Intel Mac
+          - windows-latest
         version:
           - latest
           - 3.3.0
@@ -46,7 +50,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: 
+          - ubuntu-latest
+          - macos-latest # Apple M1 Silicon
+          - macos-13 # Intel Mac
+          - windows-latest
         version:
           - latest
           - 3.3.0-0.0.pre
