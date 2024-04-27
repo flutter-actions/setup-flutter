@@ -42,5 +42,6 @@ runs:
         path: ${{ runner.temp }}/pub-cache
         key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}-pub-cache
     # Run the action
-    - run: $GITHUB_ACTION_PATH/action.sh ${{ inputs.version }} ${{ inputs.channel }}
+    - name: Setup Flutter SDK
+      run: $GITHUB_ACTION_PATH/action.sh ${{ inputs.version }} ${{ inputs.channel }}
       shell: bash
