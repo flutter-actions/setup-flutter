@@ -19,6 +19,7 @@ then
 	then
 		CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_VERSION=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_SHA256=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		rm "$FLUTTER_RELEASE_MANIFEST_FILE"
 	else
 		echo -e "::error::Failed to detect the latest version."
@@ -82,7 +83,18 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 
 	# Download installation archive
 	DOWNLOAD_PATH="${RUNNER_TEMP}/${FLUTTER_BUILD}"
-	curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH}
+	if curl --connect-timeout 15 --retry 5 "$FLUTTER_DOWNLOAD_URL" > ${DOWNLOAD_PATH};
+	then
+		if [[ $OS == "linux" ]]
+		then
+			echo "${FLUTTER_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
+		else
+			echo "${FLUTTER_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+		fi
+	else
+		echo -e "::error::Download failed! Please check passed arguments."
+		exit 1
+	fi
 
 	# Prepare tool cache folder
 	mkdir -p "${FLUTTER_RUNNER_TOOL_CACHE}"
