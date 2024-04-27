@@ -94,9 +94,9 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		echo -n "Verifying checksum..."
 		if [[ $OS == "linux" ]]
 		then
-			echo "${FLUTTER_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
+			echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
 		else
-			echo "${FLUTTER_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+			echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
 		fi
 	else
 		echo -e "::error::Download failed! Please check passed arguments."
