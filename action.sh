@@ -12,11 +12,18 @@ FLUTTER_OS=$OS
 # Detect the latest version
 if [[ $FLUTTER_VERSION == "latest" ]]
 then
-        echo "Detecting latest version..."
-        curl -L https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json -o "${RUNNER_TEMP}/flutter_release.json"
-        CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "${RUNNER_TEMP}/flutter_release.json")
-        FLUTTER_VERSION=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].version" "${RUNNER_TEMP}/flutter_release.json")
-        rm "${RUNNER_TEMP}/flutter_release.json"
+	FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json"
+	FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
+	echo "Detecting latest version..."
+	if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
+	then
+		CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_VERSION=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		rm "$FLUTTER_RELEASE_MANIFEST_FILE"
+	else
+		echo -e "::error::Failed to detect the latest version."
+		exit 1
+	fi
 fi
 
 # Apple Intel or Apple Silicon
