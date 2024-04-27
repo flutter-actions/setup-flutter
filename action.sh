@@ -110,13 +110,12 @@ echo "PUB_CACHE=${FLUTTER_PUB_CACHE}" >> $GITHUB_ENV
 echo "${FLUTTER_PUB_CACHE}/bin" >> $GITHUB_PATH
 echo "${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin" >> $GITHUB_PATH
 
+# Invoke Flutter SDK to suppress the analytics.
+${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter --version --suppress-analytics > /dev/null
+
 # Disable Google Analytics and CLI animations
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-analytics
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-cli-animations
-
-# Print Flutter config
-echo "Flutter config:"
-${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config
 
 # Report success, and print version.
 echo -e "Succesfully installed Flutter SDK:"
