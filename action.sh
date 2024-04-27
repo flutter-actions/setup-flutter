@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# Options
 ARCH=$(echo "${RUNNER_ARCH:-x64}" | awk '{print tolower($0)}')
 OS=$(echo "${RUNNER_OS:-linux}" | awk '{print tolower($0)}')
 
@@ -9,6 +7,7 @@ FLUTTER_VERSION=${1:-"latest"}
 FLUTTER_CHANNEL=${2:-"stable"}
 FLUTTER_OS=$OS
 
+# Flutter SDK release manifest
 FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
 FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
