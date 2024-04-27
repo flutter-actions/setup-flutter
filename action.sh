@@ -9,18 +9,25 @@ FLUTTER_VERSION=${1:-"latest"}
 FLUTTER_CHANNEL=${2:-"stable"}
 FLUTTER_OS=$OS
 
+FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
+FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
+FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
+
 # Detect the latest version
 if [[ $FLUTTER_VERSION == "latest" ]]
 then
-	FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$OS.json"
-	FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
 	echo "Detecting latest version..."
 	if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
 	then
-		CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_VERSION=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_SHA256=$(jq -r ".releases | map(select(.hash == \"${CURRENT_RELEASE}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_CURRENT=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_VERSION=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		rm "$FLUTTER_RELEASE_MANIFEST_FILE"
+
+		# Set the detected version
+		FLUTTER_VERSION=$FLUTTER_RELEASE_VERSION
+		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	else
 		echo -e "::error::Failed to detect the latest version."
 		exit 1
@@ -40,10 +47,6 @@ fi
 FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${RUNNER_ARCH}"
 FLUTTER_PUB_CACHE="${RUNNER_TEMP}/pub-cache"
 
-# Check if Flutter SDK already exists
-# Otherwise download and install
-# https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.0.2-stable.zip
-FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 
 # OS archive file extension
 EXT="zip"
@@ -52,9 +55,12 @@ then
 	EXT="tar.xz"
 fi
 
+# Check if Flutter SDK already exists
+# Otherwise download and install
+# https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.0.2-stable.zip
 if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	FLUTTER_BUILD_OS=$FLUTTER_OS
-	echo "Installing Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${OS}_${ARCH}\" ..."
+	echo "Installing Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${ARCH}\" ..."
 
 	# Linux
 	# /stable    /linux/     flutter_linux_2.10.2-stable.tar.xz
@@ -77,7 +83,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	fi
 
 	FLUTTER_BUILD="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
-	FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"
+	FLUTTER_DOWNLOAD_URL=${FLUTTER_DOWNLOAD_URL:-"${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"}
 
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
 
@@ -113,7 +119,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		exit 1
 	fi
 else
-	echo "Cache restored Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${OS}_${ARCH}\""
+	echo "Cache restored Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${ARCH}\""
 fi
 
 # Configure pub to use a fixed location.
