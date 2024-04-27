@@ -100,7 +100,8 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 			then
 				echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | sha256sum -c -
 			else
-				echo "${FLUTTER_RELEASE_SHA256} ${DOWNLOAD_PATH}" | shasum -a 256 -c -
+				# Note: on macOS put 2 spaces between the hash and the filename
+				echo "${FLUTTER_RELEASE_SHA256}  ${DOWNLOAD_PATH}" | shasum -a 256 -c -
 			fi
 		fi
 	else
