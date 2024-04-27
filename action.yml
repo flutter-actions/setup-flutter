@@ -5,9 +5,9 @@ branding:
   color: "blue"
 inputs:
   version:
-    description: "The version to install: Default: 3.0.2"
+    description: "The version to install: Default: latest"
     required: false
-    default: "3.0.2"
+    default: "latest"
   channel:
     description: "The version to install. Default: stable"
     required: false
