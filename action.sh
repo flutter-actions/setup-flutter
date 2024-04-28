@@ -133,7 +133,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 
 	# Extracting installation archive
 	EXTRACT_ARCHIVE_CODE=0
-	echo "Extracting Flutter SDK archive..."
+	echo -n "Extracting Flutter SDK archive..."
 	if [[ $OS == linux ]]
 	then
 		tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf ${DOWNLOAD_PATH} > /dev/null
@@ -142,7 +142,9 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		unzip ${DOWNLOAD_PATH} -d "${FLUTTER_RUNNER_TOOL_CACHE}" > /dev/null
 		EXTRACT_ARCHIVE_CODE=$?
 	fi
-	if [ $EXTRACT_ARCHIVE_CODE -ne 0 ]; then
+	if [ $EXTRACT_ARCHIVE_CODE -eq 0 ]; then
+		echo ": OK"
+	else
 		echo -e "::error::Failed to extract Flutter SDK archive."
 		exit 1
 	fi
@@ -165,6 +167,7 @@ ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-analytics 2&>1 > /d
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter config --no-cli-animations 2&>1 > /dev/null
 
 # Report success, and print version.
-echo -e "Succesfully installed Flutter SDK:"
+echo "Succesfully installed Flutter SDK:"
+echo "------------------------------------------------------------------------------"
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/dart --version
 ${FLUTTER_RUNNER_TOOL_CACHE}/flutter/bin/flutter --version
