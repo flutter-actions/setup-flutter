@@ -103,6 +103,10 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	FLUTTER_BUILD="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
 	FLUTTER_DOWNLOAD_URL=${FLUTTER_DOWNLOAD_URL:-"${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"}
 
+	if [[ -z "${FLUTTER_DOWNLOAD_URL}" ]]; then
+		echo -e "::error::Failed to determine the download URL for Flutter SDK."
+		exit 1
+	fi
 	# Download installation archive
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
 	DOWNLOAD_PATH="${RUNNER_TEMP}/${FLUTTER_BUILD}"
