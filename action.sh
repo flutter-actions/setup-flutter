@@ -31,8 +31,11 @@ if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 	# Detect the latest version
 	if [[ $FLUTTER_VERSION == "latest" ]]
 	then
-		__QUERY="select(.hash == \"${FLUTTER_RELEASE_CURRENT}\" and .dart_sdk_arch == \"${ARCH}\")"
 		FLUTTER_RELEASE_CURRENT=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		__QUERY="select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")"
+		if [[ $ARCH == "arm64" ]]; then
+			__QUERY="select(.hash == \"${FLUTTER_RELEASE_CURRENT}\" and .dart_sdk_arch == \"${ARCH}\")"
+		fi
 		FLUTTER_RELEASE_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(${__QUERY}) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(${__QUERY}) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
@@ -41,7 +44,10 @@ if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 		FLUTTER_VERSION=$FLUTTER_RELEASE_VERSION
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	else
-		__QUERY="select(.version == \"${FLUTTER_VERSION}\" and .dart_sdk_arch == \"${ARCH}\")"
+		__QUERY="select(.version == \"${FLUTTER_VERSION}\")"
+		if [[ $ARCH == "arm64" ]]; then
+			__QUERY="select(.version == \"${FLUTTER_VERSION}\" and .dart_sdk_arch == \"${ARCH}\")"
+		fi
 		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(${__QUERY}) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(${__QUERY}) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
 
