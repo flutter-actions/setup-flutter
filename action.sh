@@ -20,9 +20,10 @@ if [ ! -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 	if [ $? -ne 0 ]; then
 		echo -e "::warning::Failed to fetch Flutter SDK release manifest."
 	fi
-elif [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
+else
 	echo "Using cached Flutter SDK release manifest."
-
+fi
+if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 	# Obtain the base URL and override FLUTTER_RELEASE_BASE_URL
 	FLUTTER_RELEASE_BASE_URL=$(jq -r ".base_url" "$FLUTTER_RELEASE_MANIFEST_FILE")
 
@@ -45,7 +46,7 @@ elif [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	fi
 else
-	echo -e "::warning::Switched to using default fallback download strategy."
+	echo -e "::warning::Flutter SDK release manifest not found. Switched to using default fallback download strategy."
 fi
 
 # Apple Intel or Apple Silicon
