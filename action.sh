@@ -8,13 +8,24 @@ FLUTTER_CHANNEL=${2:-"stable"}
 FLUTTER_OS=$OS
 
 # Flutter SDK release manifest
-FLUTTER_RELEASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
-FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/flutter_release.json"
+FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/releases_$FLUTTER_OS.json"
+FLUTTER_RELEASE_BASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 
-echo "Fetching Flutter SDK release manifest..."
-if curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE";
-then
+# Check if Flutter SDK release manifest exists
+# Otherwise fetch and cache it
+if [ ! -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
+	echo "Fetching Flutter SDK release manifest..."
+	curl -fsSL "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE"
+	if [ $? -ne 0 ]; then
+		echo -e "::warning::Failed to fetch Flutter SDK release manifest."
+	fi
+elif [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
+	echo "Using cached Flutter SDK release manifest."
+
+	# Obtain the base URL and override FLUTTER_RELEASE_BASE_URL
+	FLUTTER_RELEASE_BASE_URL=$(jq -r ".base_url" "$FLUTTER_RELEASE_MANIFEST_FILE")
+
 	# Detect the latest version
 	if [[ $FLUTTER_VERSION == "latest" ]]
 	then
@@ -25,16 +36,16 @@ then
 
 		# Set the detected version
 		FLUTTER_VERSION=$FLUTTER_RELEASE_VERSION
-		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
+		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	else
 		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
 
 		# Set the detected version
-		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
+		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	fi
 else
-	echo -e "::warning::Failed to fetch Flutter SDK release manifest. Switched to using default fallback download strategy."
+	echo -e "::warning::Switched to using default fallback download strategy."
 fi
 
 # Apple Intel or Apple Silicon
@@ -86,7 +97,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	fi
 
 	FLUTTER_BUILD="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
-	FLUTTER_DOWNLOAD_URL=${FLUTTER_DOWNLOAD_URL:-"${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"}
+	FLUTTER_DOWNLOAD_URL=${FLUTTER_DOWNLOAD_URL:-"${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD}"}
 
 	# Download installation archive
 	echo "Downloading ${FLUTTER_DOWNLOAD_URL}"
