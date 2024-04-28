@@ -6,6 +6,7 @@ OS=$(echo "${RUNNER_OS:-linux}" | awk '{print tolower($0)}')
 FLUTTER_VERSION=${1:-"latest"}
 FLUTTER_CHANNEL=${2:-"stable"}
 FLUTTER_OS=$OS
+FLUTTER_ARCH=$ARCH
 
 # Flutter SDK release manifest
 FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_release/releases/releases_$FLUTTER_OS.json"
@@ -30,17 +31,19 @@ if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 	# Detect the latest version
 	if [[ $FLUTTER_VERSION == "latest" ]]
 	then
+		__QUERY="select(.hash == \"${FLUTTER_RELEASE_CURRENT}\" and .dart_sdk_arch == \"${ARCH}\")"
 		FLUTTER_RELEASE_CURRENT=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_RELEASE_VERSION=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.hash == \"${FLUTTER_RELEASE_CURRENT}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(${__QUERY}) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(${__QUERY}) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
 
 		# Set the detected version
 		FLUTTER_VERSION=$FLUTTER_RELEASE_VERSION
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
 	else
-		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(select(.version == \"${FLUTTER_VERSION}\")) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		__QUERY="select(.version == \"${FLUTTER_VERSION}\" and .dart_sdk_arch == \"${ARCH}\")"
+		FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(${__QUERY}) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+		FLUTTER_RELEASE_ARCHIVE=$(jq -r ".releases | map(${__QUERY}) | .[0].archive" "$FLUTTER_RELEASE_MANIFEST_FILE")
 
 		# Set the detected version
 		FLUTTER_DOWNLOAD_URL="${FLUTTER_RELEASE_BASE_URL}/${FLUTTER_RELEASE_ARCHIVE}"
