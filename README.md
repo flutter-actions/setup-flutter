@@ -1,6 +1,7 @@
 [flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
+[Pub.dev]: https://pub.dev
 [GitHub Action]: https://github.com/flutter-actions/setup-flutter
-[`LICENSE`]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
+[MIT License]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
 
 ## About
 
@@ -62,11 +63,15 @@ jobs:
         run: flutter test
 ```
 
-## Automated publishing of packages to pub.dev
+## Automated publishing of packages to [Pub.dev]
 
-You can automate publishing from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
+You can automated publishing of packages to [Pub.dev]from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
 
-See [flutter-actions/setup-pubdev-credentials] for more information.
+```yml
+# Setup Flutter SDK and automated pub.dev credentials
+- uses: flutter-actions/setup-flutter@v3
+- uses: flutter-actions/setup-pubdev-credentials@v1
+```
 
 ## Troubleshooting
 
@@ -96,4 +101,5 @@ curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SET
 
 # License
 
-See the [`LICENSE`] file.
+Licensed under the [MIT License].
+
