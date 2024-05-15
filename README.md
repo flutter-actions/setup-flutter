@@ -65,7 +65,7 @@ jobs:
 
 ## Automated publishing of packages to [Pub.dev]
 
-You can automated publishing of packages to [Pub.dev]from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
+You can automated publishing of packages to [Pub.dev] from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
 
 ```yml
 # Setup Flutter SDK and automated pub.dev credentials
