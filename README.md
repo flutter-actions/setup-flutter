@@ -1,6 +1,6 @@
 ## About
 
-This [GitHub Action]() installs and sets up of a Flutter SDK for use in actions by:
+This [GitHub Action](https://github.com/flutter-actions/setup-flutter) installs and sets up of a Flutter SDK for use in actions by:
 
 * Downloading the Flutter SDK
 * Adding the `flutter` command and `dart` command to path
