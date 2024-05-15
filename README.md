@@ -1,6 +1,10 @@
+[flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
+[GitHub Action]: https://github.com/flutter-actions/setup-flutter
+[`LICENSE`]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
+
 ## About
 
-This [GitHub Action](https://github.com/flutter-actions/setup-flutter) installs and sets up of a Flutter SDK for use in actions by:
+This [GitHub Action] installs and sets up of a Flutter SDK for use in actions by:
 
 * Downloading the Flutter SDK
 * Adding the `flutter` command and `dart` command to path
@@ -60,9 +64,9 @@ jobs:
 
 ## Automated publishing of packages to pub.dev
 
-You can automate publishing from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials](https://github.com/flutter-actions/setup-pubdev-credentials) action.
+You can automate publishing from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
 
-See [flutter-actions/setup-pubdev-credentials](https://github.com/flutter-actions/setup-pubdev-credentials) for more information.
+See [flutter-actions/setup-pubdev-credentials] for more information.
 
 ## Troubleshooting
 
@@ -92,4 +96,4 @@ curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SET
 
 # License
 
-See the [`LICENSE`](LICENSE) file.
+See the [`LICENSE`] file.
