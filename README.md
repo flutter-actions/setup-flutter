@@ -9,6 +9,8 @@ This [GitHub Action] installs and sets up of a Flutter SDK for use in actions by
 
 * Downloading the Flutter SDK
 * Adding the `flutter` command and `dart` command to path
+* Support for caching the Flutter SDK and pub dependencies
+* Support for automated publishing of packages to [Pub.dev]
 
 [![Flutter](https://github.com/flutter-actions/setup-flutter/actions/workflows/dart.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/dart.yml)
 
@@ -99,4 +101,3 @@ curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SET
 # License
 
 Licensed under the [MIT License].
-
