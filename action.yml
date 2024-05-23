@@ -30,14 +30,14 @@ runs:
     # Cache the Flutter SDK
     - if: ${{ inputs.cache-sdk == 'true' }}
       name: Configure Flutter SDK cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
         key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
     # Cache the pub dependencies
     - if: ${{ inputs.cache == 'true' }}
       name: Configure pub dependencies cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ runner.temp }}/pub-cache
         key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}-pub-cache
