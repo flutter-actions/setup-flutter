@@ -9,9 +9,9 @@ inputs:
     required: false
     default: "latest"
   channel:
-    description: "The version to install. Default: stable"
+    description: 'The release channel to install. Default: stable'
     required: false
-    default: "stable"
+    default: 'stable'
   cache:
     description: 'Cache the pub dependencies. Default: false'
     required: false

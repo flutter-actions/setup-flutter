@@ -1,7 +1,7 @@
-[flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
-[Pub.dev]: https://pub.dev
 [GitHub Action]: https://github.com/flutter-actions/setup-flutter
 [MIT License]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
+[flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
+[Pub.dev]: https://pub.dev
 
 ## About
 
@@ -17,11 +17,11 @@ This [GitHub Action] installs and sets up of a Flutter SDK for use in actions by
 ## Inputs
 
 The action takes the following inputs:
-  * `channel`: (Required) A release channel, which will install the latest build from that channel.
+  * `version`: (Required) A specific Flutter SDK version to install, e.g. `latest` or `3.0.2` or `3.1.0-9.0.pre`
+
+  * `channel`: (Required) The Flutter SDK release channel to install.
     Available channels are `stable`, `beta`. See
     https://flutter.dev/docs/development/tools/sdk/releases for details.
-
-  * `version`: (Required) A specific SDK version, e.g. `latest` or `3.0.2` or `3.1.0-9.0.pre`
 
   * `cache`: (Optional) Enable cache of the pub dependencies. Default: false
 
