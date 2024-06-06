@@ -76,13 +76,6 @@ You can automated test across multiple version of **Flutter SDK** by using [flut
     <img src="https://github.com/flutter-actions/pubspec-matrix-action/blob/main/.github/assets/screenshot-light.png">
 </picture>
 
-## Alternatives
-
-The [GitHub Actions for Flutter SDK] team also implemented an alternative action to Setup Flutter SDK using [Flutter Version Management] `fvm`. See [flutter-actions/setup-fvm] for more information.
-
-**See also:**
-- [subosito/flutter-action](https://github.com/subosito/flutter-action)
-
 ## Troubleshooting
 
 ### Apple Silicon
@@ -108,6 +101,13 @@ This action is designed to be used in GitHub Actions environment. If you want to
 export SETUP_FLUTTER_BRANCH=main
 curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SETUP_FLUTTER_BRANCH}/install.sh | bash -s -- 3.0.2 stable
 ```
+
+## Alternatives
+
+The [GitHub Actions for Flutter SDK] team also implemented an alternative action to Setup Flutter SDK using [Flutter Version Management] `fvm`. See [flutter-actions/setup-fvm] for more information.
+
+**See also:**
+- [subosito/flutter-action](https://github.com/subosito/flutter-action)
 
 # License
 
