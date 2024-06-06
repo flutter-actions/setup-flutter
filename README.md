@@ -1,8 +1,3 @@
-[GitHub Action]: https://github.com/flutter-actions/setup-flutter
-[MIT License]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
-[flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
-[Pub.dev]: https://pub.dev
-
 ## About
 
 This [GitHub Action] installs and sets up of a Flutter SDK for use in actions by:
@@ -72,6 +67,23 @@ You can automated publishing of packages to [Pub.dev] from GitHub Actions by usi
 - uses: flutter-actions/setup-pubdev-credentials@v1
 ```
 
+## Automated test across multiple version of Flutter SDK
+
+You can automated test across multiple version of **Flutter SDK** by using [flutter-actions/pubspec-matrix-action] action. This GitHub Action generates a matrix of **Dart** and **Flutter SDK** versions from a `pubspec.yaml` file.
+
+<picture>
+    <source srcset="https://github.com/flutter-actions/pubspec-matrix-action/blob/main/.github/assets/screenshot-dark.png"  media="(prefers-color-scheme: dark)">
+    <img src="https://github.com/flutter-actions/pubspec-matrix-action/blob/main/.github/assets/screenshot-light.png">
+</picture>
+
+## Alternatives
+
+The [GitHub Actions for Flutter SDK] team also implemented an alternative action to Setup Flutter SDK using `fvm`.  
+See https://github.com/flutter-actions/setup-fvm for more information.
+
+**See also:**
+- [subosito/flutter-action](https://github.com/subosito/flutter-action)
+
 ## Troubleshooting
 
 ### Apple Silicon
@@ -101,3 +113,10 @@ curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/${SET
 # License
 
 Licensed under the [MIT License].
+
+[MIT License]: https://github.com/flutter-actions/setup-flutter/blob/main/LICENSE
+[GitHub Actions for Flutter SDK]: https://github.com/flutter-actions
+[GitHub Action]: https://github.com/flutter-actions/setup-flutter
+[Pub.dev]: https://pub.dev
+[flutter-actions/setup-pubdev-credentials]: https://github.com/flutter-actions/setup-pubdev-credentials
+[flutter-actions/pubspec-matrix-action]: https://github.com/flutter-actions/pubspec-matrix-action
