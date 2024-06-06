@@ -67,7 +67,7 @@ You can automated publishing of packages to [Pub.dev] from GitHub Actions by usi
 - uses: flutter-actions/setup-pubdev-credentials@v1
 ```
 
-## Automated test across multiple version of Flutter SDK
+## Automated job matrix across multiple version of Flutter SDK
 
 You can automated test across multiple version of **Flutter SDK** by using [flutter-actions/pubspec-matrix-action] action. This GitHub Action generates a matrix of **Dart** and **Flutter SDK** versions from a `pubspec.yaml` file.
 
