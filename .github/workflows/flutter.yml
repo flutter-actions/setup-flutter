@@ -1,37 +1,29 @@
 name: Flutter
 
 on:
-  push:
-    branches: [main, v*]
-  pull_request:
-    branches: [main, v*]
-  schedule:
-    # https://crontab.guru/#40_10_*_*_*
-    - cron: '40 10 * * *'
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: 'Operating system'
+        required: true
+        default: 'ubuntu-latest'
+        type: string
+      version:
+        description: 'Flutter version'
+        required: true
+        default: 'latest'
+        type: string
   
 jobs:
   test-stable:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: 
-          - ubuntu-latest
-          - macos-latest # Apple M1 Silicon
-          - macos-13 # Intel Mac
-          - windows-latest
-        version:
-          - latest
-          - 3.3.0
-          - 3.0.0
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./
         with:
           channel: stable
-          version: ${{ matrix.version }}
+          version: ${{ inputs.version }}
 
       - name: Dart version
         run: dart --version
@@ -46,26 +38,14 @@ jobs:
           dart hello.dart
 
   test-beta:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: 
-          - ubuntu-latest
-          - macos-latest # Apple M1 Silicon
-          - macos-13 # Intel Mac
-          - windows-latest
-        version:
-          - latest
-          - 3.3.0-0.0.pre
-          - 3.1.0
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./
         with:
           channel: beta
-          version: ${{ matrix.version }}
+          version: ${{ inputs.version }}
 
       - name: Dart version
         run: dart --version
