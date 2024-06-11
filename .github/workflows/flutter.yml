@@ -17,7 +17,6 @@ on:
 jobs:
   test-stable:
     runs-on: ${{ inputs.runs-on }}
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -40,7 +39,6 @@ jobs:
 
   test-beta:
     runs-on: ${{ inputs.runs-on }}
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
