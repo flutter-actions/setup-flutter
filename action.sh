@@ -68,7 +68,7 @@ fi
 # Flutter runner tool cache and pub cache
 # path: "${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}"
 # key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
-FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${RUNNER_ARCH}"
+FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${FLUTTER_CHANNEL}-${RUNNER_ARCH}"
 FLUTTER_PUB_CACHE="${RUNNER_TEMP}/pub-cache"
 
 
