@@ -13,6 +13,12 @@ FLUTTER_RELEASE_MANIFEST_URL="https://storage.googleapis.com/flutter_infra_relea
 FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/releases_$FLUTTER_OS.json"
 FLUTTER_RELEASE_BASE_URL="https://storage.googleapis.com/flutter_infra_release/releases"
 
+# Flutter runner tool cache and pub cache
+# path: "${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}"
+# key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
+FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${FLUTTER_CHANNEL}-${RUNNER_ARCH}"
+FLUTTER_PUB_CACHE="${RUNNER_TEMP}/pub-cache"
+
 # Check if Flutter SDK release manifest exists
 # Otherwise fetch and cache it
 if [ ! -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
@@ -64,15 +70,6 @@ then
 	echo -e "::error::Flutter SDK version \"${FLUTTER_VERSION}\" is not supported on Apple Silicon. Please use version 3.0.0 or higher."
 	exit 1
 fi
-
-# Flutter runner tool cache and pub cache
-# path: "${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}"
-# key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
-FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter-${RUNNER_OS}-${FLUTTER_VERSION}-${FLUTTER_CHANNEL}-${RUNNER_ARCH}"
-FLUTTER_PUB_CACHE="${RUNNER_TEMP}/pub-cache"
-
-echo "flutter tool cache: ${FLUTTER_RUNNER_TOOL_CACHE}"
-
 
 # OS archive file extension
 EXT="zip"
