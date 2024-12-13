@@ -53,7 +53,7 @@ fi
 
 # Fix Flutter SDK version for Apple Silicon
 FLUTTER_BUILD_OS=$FLUTTER_OS
-if [[ $OS == "macos" && $ARCH == "arm64" ]]; then
+if [[ $FLUTTER_OS == "macos" && $FLUTTER_ARCH == "arm64" ]]; then
 	if [[ $FLUTTER_VERSION < 3.* ]]; then
 		echo -e "::error::Flutter SDK version \"${FLUTTER_VERSION}\" is not supported on Apple Silicon. Please use version 3.0.0 or higher."
 		exit 1
@@ -108,7 +108,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 
 	# Extracting installation archive
 	echo -n "Extracting Flutter SDK archive..."
-	if [[ $OS == linux ]]
+	if [[ $FLUTTER_OS == linux ]]
 	then
 		tar -C "${FLUTTER_RUNNER_TOOL_CACHE}" -xf ${FLUTTER_BUILD_ARTIFACT_FILE} >/dev/null
 		EXTRACT_ARCHIVE_CODE=$?
@@ -123,7 +123,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		exit 1
 	fi
 else
-	echo "Flutter SDK version restored from cache: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${ARCH}\""
+	echo "Flutter SDK version restored from cache: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${FLUTTER_ARCH}\""
 fi
 
 # Configure pub to use a fixed location.
