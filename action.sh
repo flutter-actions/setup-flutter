@@ -19,19 +19,22 @@ if [[ $FLUTTER_VERSION == "latest" ]]; then
 	FLUTTER_RELEASE_MANIFEST_URL="${FLUTTER_RELEASE_URL}/releases_${FLUTTER_OS}.json"
 	FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/releases_${FLUTTER_OS}.json"
 
-	echo "You have selected to install the latest Flutter SDK version (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${FLUTTER_ARCH}\"."
+	echo "You have selected to install the latest Flutter SDK (${FLUTTER_CHANNEL}) channel on \"${FLUTTER_OS}_${FLUTTER_ARCH}\"."
 	echo "Attempting to determine the latest Flutter SDK version..."
+
 	echo "Fetching Flutter SDK release manifest..."
 	curl --silent --connect-timeout 15 --retry 5 "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE"
 	if [ $? -ne 0 ]; then
 		echo -e "::error::Failed to fetch Flutter SDK release manifest."
 		exit 1
 	fi
+
+	# Determine the latest Flutter SDK version
 	if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 		__FLUTTER_CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		__QUERY="select(.hash == \"${__FLUTTER_CURRENT_RELEASE}\" and .dart_sdk_arch == \"${ARCH}\")"
 		FLUTTER_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		if [ -z "$FLUTTER_VERSION" ]; then
+		if [ -z "$FLUTTER_VERSION" ] || [ "$FLUTTER_VERSION" == "null" ]; then
 			echo -e "::error::Failed to determine the latest Flutter SDK version."
 			exit 1
 		fi
