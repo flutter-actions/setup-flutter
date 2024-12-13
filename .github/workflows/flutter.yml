@@ -20,15 +20,59 @@ on:
         type: string
   
 jobs:
-  flutter:
-    runs-on: ${{ inputs.runs-on }}
+  stable:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest # Apple M1 Silicon
+          - macos-13 # Intel macOS
+        version:
+          - latest
+          - 3.27.0
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./
         with:
           version: ${{ inputs.version }}
-          channel: ${{ inputs.channel }}
+          channel: stable
+
+      - name: Dart version
+        run: dart --version
+      - name: Flutter version
+        run: flutter --version
+      - name: Flutter doctor
+        run: flutter doctor
+
+      - name: Run hello world
+        run: |
+          echo "main() { print('hello world'); }" > hello.dart
+          dart hello.dart
+
+  beta:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest # Apple M1 Silicon
+          - macos-13 # Intel macOS
+        version:
+          - latest
+          - 3.27.0-0.1.pre
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./
+        with:
+          version: ${{ inputs.version }}
+          channel: beta
 
       - name: Dart version
         run: dart --version
