@@ -32,15 +32,15 @@ runs:
       name: Configure Flutter SDK cache
       uses: actions/cache@v4
       with:
-        path: ${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}
-        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}
+        path: ${{ runner.tool_cache }}/flutter
+        key: flutter-action-setup-flutter-sdk-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}-${{ inputs.channel }}
     # Cache the pub dependencies
     - if: ${{ inputs.cache == 'true' }}
       name: Configure pub dependencies cache
       uses: actions/cache@v4
       with:
-        path: ${{ runner.temp }}/pub-cache
-        key: flutter-action-setup-flutter-${{ runner.os }}-${{ inputs.version }}-${{ inputs.channel }}-${{ runner.arch }}-${{ inputs.cache-key }}-pub-cache
+        path: ${{ runner.temp }}/flutter/pub-cache
+        key: flutter-action-setup-flutter-${{ inputs.cache-key }}-pub-cache-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}-${{ inputs.channel }}
     # Run the action
     - name: Setup Flutter SDK
       run: $GITHUB_ACTION_PATH/action.sh ${{ inputs.version }} ${{ inputs.channel }}
