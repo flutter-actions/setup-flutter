@@ -15,14 +15,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  stable:
     uses: ./.github/workflows/flutter.yml
     strategy:
       fail-fast: false
       matrix:
         version:
           - latest
-          - 3.0.0
+          - 3.27.0
     with:
       runs-on: windows-latest
       version: ${{ matrix.version }}
+      channel: stable
+
+  beta:
+    uses: ./.github/workflows/flutter.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - latest
+          - 3.27.0-0.1.pre
+    with:
+      runs-on: windows-latest
+      version: ${{ matrix.version }}
+      channel: beta

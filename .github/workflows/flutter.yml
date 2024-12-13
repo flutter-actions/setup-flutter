@@ -13,39 +13,22 @@ on:
         required: true
         default: 'latest'
         type: string
+      channel:
+        description: 'Flutter channel'
+        required: true
+        default: 'stable'
+        type: string
   
 jobs:
-  test-stable:
+  flutter:
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./
         with:
-          channel: stable
           version: ${{ inputs.version }}
-
-      - name: Dart version
-        run: dart --version
-      - name: Flutter version
-        run: flutter --version
-      - name: Flutter doctor
-        run: flutter doctor
-
-      - name: Run hello world
-        run: |
-          echo "main() { print('hello world'); }" > hello.dart
-          dart hello.dart
-
-  test-beta:
-    runs-on: ${{ inputs.runs-on }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./
-        with:
-          channel: beta
-          version: ${{ inputs.version }}
+          channel: ${{ inputs.channel }}
 
       - name: Dart version
         run: dart --version
