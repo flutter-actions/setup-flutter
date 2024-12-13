@@ -20,7 +20,7 @@ on:
         type: string
 
 jobs:
-  stable:
+  flutter:
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
