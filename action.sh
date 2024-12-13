@@ -65,7 +65,7 @@ fi
 
 # OS archive file extension
 EXT="zip"
-if [[ $OS == "linux" ]]
+if [[ $FLUTTER_OS == "linux" ]]
 then
 	EXT="tar.xz"
 fi
