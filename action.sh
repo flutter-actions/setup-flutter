@@ -1,6 +1,6 @@
 #!/bin/bash
-OS=$(echo "${RUNNER_OS:-linux}")
-ARCH=$(echo "${RUNNER_ARCH:-x64}")
+OS=${RUNNER_OS:-linux}
+ARCH=${RUNNER_ARCH:-x64}
 
 # Action inputs
 FLUTTER_VERSION=${1:-"latest"}
