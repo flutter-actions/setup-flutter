@@ -9,6 +9,10 @@ FLUTTER_OS=$(echo "${OS}" | awk '{print tolower($0)}')
 FLUTTER_ARCH=$(echo "${ARCH}" | awk '{print tolower($0)}')
 FLUTTER_RELEASE_URL=${FLUTTER_RELEASE_URL:-"https://storage.googleapis.com/flutter_infra_release/releases"}
 
+# WARNING:
+# Setting the Flutter SDK version to "latest" will automatically determine the latest Flutter SDK version via the release manifest.
+# But it will break the caching mechanism, and the action will download the Flutter SDK on every run.
+
 # Automatically determine the latest Flutter SDK version via the release manifest
 if [[ $FLUTTER_VERSION == "latest" ]]; then
 	# Flutter SDK release manifest
@@ -76,13 +80,11 @@ fi
 #   /stable    /windows/   flutter_windows_3.0.2-stable.zip
 #   /beta      /windows/   flutter_windows_3.1.0-9.0.pre-beta.zip
 FLUTTER_BUILD_ARTIFACT_ID="flutter_${FLUTTER_BUILD_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.${EXT}"
-FLUTTER_BUILD_ARTIFACT_URL=${FLUTTER_BUILD_ARTIFACT_URL:-"${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD_ARTIFACT_ID}"}
+FLUTTER_BUILD_ARTIFACT_URL="${FLUTTER_RELEASE_URL}/${FLUTTER_CHANNEL}/${FLUTTER_OS}/${FLUTTER_BUILD_ARTIFACT_ID}"
 
 # Flutter runner tool cache and pub cache
-#   Ref: https://github.com/flutter-actions/setup-flutter/pull/11
-# FLUTTER_RUNNER_TOOL_CACHE=${{ runner.tool_cache }}/flutter-${{ runner.os }}-${{ inputs.version }}-${{ runner.arch }}-${{ inputs.channel }}
-# FLUTTER_PUB_CACHE=${{ runner.temp }}/pub-cache
-FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter/${FLUTTER_BUILD_ARTIFACT_ID}"
+# Thanks to @alijvhr for providing a fix, https://github.com/flutter-actions/setup-flutter/pull/11
+FLUTTER_RUNNER_TOOL_CACHE="${RUNNER_TOOL_CACHE}/flutter/${FLUTTER_VERSION}/${FLUTTER_CHANNEL}"
 FLUTTER_PUB_CACHE="${RUNNER_TEMP}/flutter/pub-cache"
 
 # Check if Flutter SDK already exists, otherwise download and install
@@ -118,7 +120,7 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 		exit 1
 	fi
 else
-	echo "Cache restored Flutter SDK version: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${ARCH}\""
+	echo "Flutter SDK version restored from cache: ${FLUTTER_VERSION} (${FLUTTER_CHANNEL}) on \"${FLUTTER_OS}_${ARCH}\""
 fi
 
 # Configure pub to use a fixed location.
