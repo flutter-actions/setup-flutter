@@ -32,7 +32,7 @@ if [[ $FLUTTER_VERSION == "latest" ]]; then
 	# Determine the latest Flutter SDK version
 	if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
 		__FLUTTER_CURRENT_RELEASE=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		__QUERY="select(.hash == \"${__FLUTTER_CURRENT_RELEASE}\" and .dart_sdk_arch == \"${ARCH}\")"
+		__QUERY="select(.hash == \"${__FLUTTER_CURRENT_RELEASE}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
 		FLUTTER_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
 		if [ -z "$FLUTTER_VERSION" ] || [ "$FLUTTER_VERSION" == "null" ]; then
 			echo -e "::error::Failed to determine the latest Flutter SDK version."
