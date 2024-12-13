@@ -33,7 +33,7 @@ jobs:
 
       - uses: ./
         with:
-          version: ${{ inputs.version }}
+          version: ${{ matrix.version }}
           channel: stable
 
       - name: Dart version
@@ -66,7 +66,7 @@ jobs:
 
       - uses: ./
         with:
-          version: ${{ inputs.version }}
+          version: ${{ matrix.version }}
           channel: beta
 
       - name: Dart version
