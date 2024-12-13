@@ -7,10 +7,7 @@ This [GitHub Action] installs and sets up of a Flutter SDK for use in actions by
 * Support for caching the Flutter SDK and pub dependencies
 * Support for automated publishing of packages to [Pub.dev]
 
-[![Flutter SDK for Windows](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-windows.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-windows.yml)
-[![Flutter SDK for Linux](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-linux.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-linux.yml)
-[![Flutter SDK for macOS](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-macos.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-macos.yml)
-[![Flutter SDK for macOS (Intel)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-macos-intel.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter-macos-intel.yml)
+[![Flutter](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter.yml/badge.svg)](https://github.com/flutter-actions/setup-flutter/actions/workflows/flutter.yml)
 
 
 ## Inputs
