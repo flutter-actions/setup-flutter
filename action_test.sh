@@ -20,4 +20,5 @@ mkdir -p "$RUNNER_TOOL_CACHE" "$RUNNER_TEMP"
 touch "$GITHUB_ENV" "$GITHUB_PATH"
 
 # Run the action
+export FLUTTER_RELEASE_URL="http://localhost:9876/releases"
 exec ./action.sh "$@"
