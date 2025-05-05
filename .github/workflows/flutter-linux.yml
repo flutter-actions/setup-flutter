@@ -24,7 +24,7 @@ jobs:
           - latest
           - 3.27.0
     with:
-      runs-on: ubuntu-24.04-arm
+      runs-on: ubuntu-latest
       channel: stable
       version: ${{ matrix.version }}
 
@@ -37,6 +37,6 @@ jobs:
           - latest
           - 3.27.0-0.1.pre
     with:
-      runs-on: ubuntu-24.04-arm
+      runs-on: ubuntu-latest
       channel: beta
       version: ${{ matrix.version }}
