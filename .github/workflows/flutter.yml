@@ -18,6 +18,11 @@ on:
         required: true
         default: 'latest'
         type: string
+      cache-sdk:
+        description: 'Cache the installed Flutter SDK. Default: false'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   flutter:
@@ -29,6 +34,7 @@ jobs:
         with:
           channel: ${{ inputs.channel }}
           version: ${{ inputs.version }}
+          cache-sdk: ${{ inputs.cache-sdk }}
 
       - name: Dart version
         run: dart --version

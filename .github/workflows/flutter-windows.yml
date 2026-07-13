@@ -23,10 +23,14 @@ jobs:
         version:
           - latest
           - 3.27.0
+        cache-sdk:
+          - true
+          - false
     with:
       runs-on: windows-latest
       channel: stable
       version: ${{ matrix.version }}
+      cache-sdk: ${{ matrix.cache-sdk }}
 
   beta:
     uses: ./.github/workflows/flutter.yml
