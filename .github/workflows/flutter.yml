@@ -18,6 +18,11 @@ on:
         required: true
         default: 'latest'
         type: string
+      cache:
+        description: 'Cache the pub dependencies'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   flutter:
@@ -29,6 +34,7 @@ jobs:
         with:
           channel: ${{ inputs.channel }}
           version: ${{ inputs.version }}
+          cache: ${{ inputs.cache }}
 
       - name: Dart version
         run: dart --version

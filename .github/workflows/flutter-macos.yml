@@ -23,10 +23,14 @@ jobs:
         version:
           - latest
           - 3.27.0
+        cache:
+          - true
+          - false
     with:
       runs-on: macos-latest # Apple Silicon Mac
       channel: stable
       version: ${{ matrix.version }}
+      cache: ${{ matrix.cache }}
 
   beta:
     uses: ./.github/workflows/flutter.yml
