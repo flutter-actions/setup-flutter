@@ -23,14 +23,14 @@ jobs:
         version:
           - latest
           - 3.27.0
-        cache:
+        cache-sdk:
           - true
           - false
     with:
       runs-on: macos-13 # Intel Mac
       channel: stable
       version: ${{ matrix.version }}
-      cache: ${{ matrix.cache }}
+      cache-sdk: ${{ matrix.cache-sdk }}
 
   beta:
     uses: ./.github/workflows/flutter.yml
