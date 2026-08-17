@@ -13,51 +13,49 @@ FLUTTER_RELEASE_URL=${FLUTTER_RELEASE_URL:-"https://storage.googleapis.com/flutt
 # Setting the Flutter SDK version to "latest" will automatically determine the latest Flutter SDK version via the release manifest.
 # But it will break the caching mechanism, and the action will download the Flutter SDK on every run.
 
+# Flutter SDK release manifest
+echo "Fetching Flutter SDK release manifest..."
+FLUTTER_RELEASE_MANIFEST_URL="${FLUTTER_RELEASE_URL}/releases_${FLUTTER_OS}.json"
+FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/releases_${FLUTTER_OS}.json"
+curl --silent --connect-timeout 15 --retry 5 "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE"
+if [ $? -ne 0 ]; then
+	echo -e "::error::Failed to fetch Flutter SDK release manifest."
+	exit 1
+fi
+if [ ! -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
+	echo -e "::error::Failed to parse Flutter SDK release manifest."
+	exit 1
+fi
+
 # Automatically determine the latest Flutter SDK version via the release manifest
 if [[ $FLUTTER_VERSION == "latest" ]]; then
-	# Flutter SDK release manifest
-	FLUTTER_RELEASE_MANIFEST_URL="${FLUTTER_RELEASE_URL}/releases_${FLUTTER_OS}.json"
-	FLUTTER_RELEASE_MANIFEST_FILE="${RUNNER_TEMP}/releases_${FLUTTER_OS}.json"
-
 	echo "You have selected to install the latest Flutter SDK (${FLUTTER_CHANNEL}) channel on \"${FLUTTER_OS}_${FLUTTER_ARCH}\"."
 	echo "Attempting to determine the latest Flutter SDK version..."
 
-	echo "Fetching Flutter SDK release manifest..."
-	curl --silent --connect-timeout 15 --retry 5 "$FLUTTER_RELEASE_MANIFEST_URL" -o "$FLUTTER_RELEASE_MANIFEST_FILE"
-	if [ $? -ne 0 ]; then
-		echo -e "::error::Failed to fetch Flutter SDK release manifest."
-		exit 1
-	fi
-
 	# Determine the latest Flutter SDK version
-	if [ -f "$FLUTTER_RELEASE_MANIFEST_FILE" ]; then
-		__HASH=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
-		__QUERY="select(.hash == \"${__HASH}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
+	__HASH=$(jq -r ".current_release.${FLUTTER_CHANNEL}" "$FLUTTER_RELEASE_MANIFEST_FILE")
+	__QUERY="select(.hash == \"${__HASH}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
 
-		# Find the version with matching current release hash and architecture
-		# If no matching version is found, try to find the version with matching channel and architecture instead
+	# Find the version with matching current release hash and architecture
+	# If no matching version is found, try to find the version with matching channel and architecture instead
+	FLUTTER_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+	if [ -z "$FLUTTER_VERSION" ] || [ "$FLUTTER_VERSION" == "null" ]; then
+
+		# This is the last ditch effort to find a matching version
+		# Some architectures may not have a matching version in the current release
+		# I guess well-played Flutter team, well-played...
+
+		echo "::warning::No matching version found for the current release hash and architecture. (hash = ${__HASH})"
+		echo "::warning::Attempting to find the latest version with matching channel and architecture instead..."
+		__QUERY="select(.channel == \"${FLUTTER_CHANNEL}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
 		FLUTTER_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
+
 		if [ -z "$FLUTTER_VERSION" ] || [ "$FLUTTER_VERSION" == "null" ]; then
-
-			# This is the last ditch effort to find a matching version
-			# Some architectures may not have a matching version in the current release
-			# I guess well-played Flutter team, well-played...
-
-			echo "::warning::No matching version found for the current release hash and architecture. (hash = ${__HASH})"
-			echo "::warning::Attempting to find the latest version with matching channel and architecture instead..."
-			__QUERY="select(.channel == \"${FLUTTER_CHANNEL}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
-			FLUTTER_VERSION=$(jq -r ".releases | map(${__QUERY}) | .[0].version" "$FLUTTER_RELEASE_MANIFEST_FILE")
-
-			if [ -z "$FLUTTER_VERSION" ] || [ "$FLUTTER_VERSION" == "null" ]; then
-				echo -e "::error::Failed to determine the latest Flutter SDK version."
-				exit 1
-			fi
+			echo -e "::error::Failed to determine the latest Flutter SDK version."
+			exit 1
 		fi
-		echo "Found the latest Flutter SDK version: ${FLUTTER_VERSION}"
-	else
-		echo -e "::error::Failed to parse Flutter SDK release manifest."
-		exit 1
 	fi
+	echo "Found the latest Flutter SDK version: ${FLUTTER_VERSION}"
 fi
 
 # Strip 'v' prefix from the version
@@ -116,6 +114,28 @@ if [ ! -d "${FLUTTER_RUNNER_TOOL_CACHE}" ]; then
 	if [ $? -ne 0 ]; then
 		echo -e "::error::Download failed! Please check passed arguments."
 		exit 1
+	fi
+
+	# Verifying checksum
+	__QUERY="select(.version == \"${FLUTTER_VERSION}\" and .channel == \"${FLUTTER_CHANNEL}\" and .dart_sdk_arch == \"${FLUTTER_ARCH}\")"
+	FLUTTER_RELEASE_SHA256=$(jq -r ".releases | map(${__QUERY}) | .[0].sha256" "$FLUTTER_RELEASE_MANIFEST_FILE")
+	if [[ -n "${FLUTTER_RELEASE_SHA256}" ]]; then
+		FLUTTER_RELEASE_SHA256_CODE=0
+		echo -n "Verifying checksum: "
+		if [[ $FLUTTER_OS == "macos" ]]
+		then
+			# Note: on macOS put 2 spaces between the hash and the filename
+			echo "${FLUTTER_RELEASE_SHA256}  ${FLUTTER_BUILD_ARTIFACT_FILE}" | shasum -a 256 -c -
+			FLUTTER_RELEASE_SHA256_CODE=$?
+		else
+			echo "${FLUTTER_RELEASE_SHA256} ${FLUTTER_BUILD_ARTIFACT_FILE}" | sha256sum -c -
+			FLUTTER_RELEASE_SHA256_CODE=$?
+		fi
+		if [ $FLUTTER_RELEASE_SHA256_CODE -ne 0 ]; then
+			echo "${FLUTTER_RELEASE_SHA256} ${FLUTTER_BUILD_ARTIFACT_FILE}: FAILED"
+			echo "::error::Checksum verification failed! Please check passed arguments."
+			exit 1
+		fi
 	fi
 
 	# Prepare runner tool cache
