@@ -1,0 +1,23 @@
+name: "Setup Flutter SDK version file"
+description: "Read the Flutter SDK version from environment.flutter in a pubspec.yaml file"
+branding:
+  icon: "triangle"
+  color: "blue"
+inputs:
+  path:
+    description: "The path to the pubspec.yaml file. Default: pubspec.yaml"
+    required: false
+    default: "pubspec.yaml"
+outputs:
+  version:
+    description: "The Flutter SDK version, to pass to the version input of flutter-actions/setup-flutter"
+    value: ${{ steps.resolve.outputs.version }}
+runs:
+  using: "composite"
+  steps:
+    - id: resolve
+      name: Resolve Flutter SDK version
+      run: $GITHUB_ACTION_PATH/action.sh "$VERSION_FILE"
+      shell: bash
+      env:
+        VERSION_FILE: ${{ inputs.path }}

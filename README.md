@@ -61,6 +61,22 @@ jobs:
         run: flutter test
 ```
 
+## Reading the version from `pubspec.yaml`
+
+Use the `version-file` action to automatically set `environment.flutter` from `pubspec.yaml` as the version. Ranges resolve to their lower bound, e.g. `^3.27.0` and `'>=3.27.0 <4.0.0'` both install `3.27.0`, and `any` installs `latest`.
+
+```yml
+      - id: flutter-version
+        uses: flutter-actions/setup-flutter/version-file@v4
+        with:
+          path: pubspec.yaml # Default: pubspec.yaml
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ steps.flutter-version.outputs.version }}
+```
+
 ## Automated publishing of packages to [Pub.dev]
 
 You can automated publishing of packages to [Pub.dev] from GitHub Actions by using the [flutter-actions/setup-pubdev-credentials] action.
@@ -99,7 +115,7 @@ This action is designed to be used in GitHub Actions environment. If you want to
 ```bash
 # Usage:
 #     curl -fsSL https://raw.githubusercontent.com/flutter-actions/setup-flutter/main/install.sh | bash -s -- <version> <channel>
-# 
+#
 # Example:
 
 export SETUP_FLUTTER_BRANCH=main

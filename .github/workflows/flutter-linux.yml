@@ -44,3 +44,30 @@ jobs:
       runs-on: ubuntu-latest
       channel: beta
       version: ${{ matrix.version }}
+
+  version-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Test version-file resolver
+        run: ./version-file/action_test.sh
+
+      - name: Create pubspec.yaml
+        run: |
+          cat > pubspec.yaml <<'EOF'
+          name: example
+          environment:
+            sdk: ^3.6.0
+            flutter: 3.27.0
+          EOF
+
+      - id: flutter-version
+        uses: ./version-file
+
+      - uses: ./
+        with:
+          version: ${{ steps.flutter-version.outputs.version }}
+
+      - name: Check Flutter version
+        run: flutter --version | grep 'Flutter 3.27.0 '
